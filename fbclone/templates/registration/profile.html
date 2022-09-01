@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<link rel="stylesheet"  href="{% static './registration/css/bootstrap.min.css' %}">
+
+</head>
+<body>
+	
+	<h4>hello {{user.username}}</h4>
+	<form action="" method="POST">
+		{% csrf_token %}
+		
+		<a href="{% url 'createpost' %}" class="btn btn-info">Create Post</a>
+		<a href="{% url 'home' %}" class="btn btn-outline-danger">Logout</a>
+		</div>
+	</form>
+</body>
+</html>

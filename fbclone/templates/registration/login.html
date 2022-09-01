@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<link rel="stylesheet"  href="{% static './registration/css/bootstrap.min.css' %}">
+
+</head>
+<body>
+	<div class="row">
+		<div class="col-sm-4 offset-4">
+			<br/>
+			<h4 class="text-center alert alert-info">Login Page</h4>
+			<form action="" method="POST">
+			 	{% csrf_token %}
+			 	{{form.as_p}}
+			 	<input type="submit"  value="login" class="btn btn-outline-primary">
+			 	<a href="{% url 'signup' %}" class="btn btn-outline-secondary">signup</a>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

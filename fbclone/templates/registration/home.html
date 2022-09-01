@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>fbclone</title>
+	<link rel="stylesheet"  href="{% static './registration/css/bootstrap.min.css' %}">
+</head>
+
+<body>
+	<div class="col-sm-4 offset-4" >
+		{% block content %} 
+		<h4>home page </h4>
+		<a href="{% url 'login' %}" class="btn btn-primary" role="button">Login</a>
+		
+		<a href="{% url 'signup' %}" class="btn btn-info">Signup</a>\
+		{% if stu %}
+			{%for st in stu %}
+				{{st.title}} <br>
+				{{st.discription}} <br>
+				{{st.photo}}
+			{% endfor %}
+		{% endif %}
+		
+		{% endblock content %}
+
+</body>
+</html>
