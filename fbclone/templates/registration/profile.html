@@ -9,14 +9,37 @@
 
 </head>
 <body>
-	
-	<h4>hello {{user.username}}</h4>
-	<form action="" method="POST">
-		{% csrf_token %}
-		
-		<a href="{% url 'createpost' %}" class="btn btn-info">Create Post</a>
-		<a href="{% url 'home' %}" class="btn btn-outline-danger">Logout</a>
-		</div>
-	</form>
+	{{fm}}
+	<div class="container">
+	{% block content %}  
+		<h4>hello {{user.username}}</h4>
+			<form action="" method="POST">
+				{% csrf_token %}
+				
+				<a href="{% url 'createpost' %}" class="btn btn-info">Create Post</a>
+				<a href="{% url 'home' %}" class="btn btn-outline-danger">Logout</a>
+				<br><br><br>
+			{%if pst %}
+				{% for p in pst %}
+					 <br>
+					 <br>
+					{{user}}<br>
+					{{p.title}}	<br>
+					{{p.discription}} <br>
+					<div class="">
+						<img src="{{ p.photo.url }}" class="img-responsive" style="width:200px; float: left; margin-right: 10px;"/>
+					</div><br><br><br><br><br><br>
+					<form action="{% url 'deletepost' p.id %}" method="POST" class="d-inline">
+			      		{% csrf_token %}
+			      		<input type="submit" class="btn btn-danger" value="Delete">
+			      	</form>
+			      	<a href="" class="btn btn-warning btn-sm">Update</a><br><br>
+				{% endfor%}
+			{% endif %}
+			
+						
+			</form>
+		{% endblock content%}
+	</div>
 </body>
 </html>
