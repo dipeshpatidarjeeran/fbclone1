@@ -7,5 +7,6 @@ urlpatterns=[
 	path('signup/', SignUpView.as_view(), name='signup'),
 	path('profile/',ProfileTemplate.as_view(),name="profile"),
 	path('create/',CreatePost.as_view(),name='createpost'),
-	#path('<int:Id>/',PostDeleteView.as_view(), name="deletedata"),
+	
+	
 ]
