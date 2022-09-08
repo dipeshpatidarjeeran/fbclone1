@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<link rel="stylesheet"  href="{% static './registration/css/bootstrap.min.css' %}">
+
+</head>
+<body>
+	<div class="row">
+		<div class="col-sm-4 offset-4">
+			<h2 class="text-center alert alert-info">User detail</h2>
+			{% if details %}
+				Name:-{{details.username}}<br>
+				firstName:-{{details.first_name}}<br>
+				LastName:-{{details.last_name}}<br>
+				Email:-{{details.email}}<br>
+			{% endif %}
+			<a href="{% url 'profile' %}" class="btn btn-success">Back</a>
+		</div>
+	</div>
+</body>
+</html>

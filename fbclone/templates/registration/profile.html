@@ -10,36 +10,34 @@
 </head>
 <body>
 	
-	{{fm}}
+	
 	<div class="row">
 		<div class="col-sm-4 offset-4">
 			{% block content %} 
-			 	
-				<h4>hello {{username}}</h4>
-				
-					<form action="" method="POST">
-						{% csrf_token %}
-						
-						<a href="{% url 'createpost' %}" class="btn btn-info">Create Post</a>
-						<a href="{% url 'home' %}" class="btn btn-outline-danger">Logout</a>
-						<br><br><br>
-					{%if pst %}
-						{% for p in pst %}
-							 <br>
-							 <br>
-							{{p.post_user}}<br>
-							{{p.title}}	<br>
-							{{p.discription}} <br>
-							{{p.date}} <br>
-							<div class="center">
-								<img src="{{ p.photo.url }}" class="img-responsive" style="width:500px; float: left; margin-right: 10px;"/>
-							</div><br><br><br><br><br><br>
-							
-					      	<a href="" class="btn btn-warning btn-sm">Update</a><br><br>
-						{% endfor%}
-					{% endif %}			
-					</form>
-				{% endblock content%}
+			 	{% if request.user.is_authenticated %}
+					<h4>hello {{user.username }}</h4>
+						<form action="" method="POST">
+							{% csrf_token %}
+							<a href="{% url 'mypost' user.id %}" class="btn btn-outline-secondary">My Post</a>
+							<a href="{% url 'createpost' %}" class="btn btn-info">Create Post</a>
+							<a href="{% url 'home' %}" class="btn btn-outline-danger">Logout</a>
+							<br><br><br>
+							{% for post in  post_list %}	
+								
+								<a href="{% url 'Userdetail' post.author_id %}">{{post.author}}</a><br>
+								{{post.title}}<br>
+								{{post.discription}}<br>
+								{{post.created_on}}
+								<div class="center">
+									<img src="{% if post.photo %}{{ post.photo.url }}{%else%}#{% endif %}" class="img-responsive" style="width:500px; float: left; margin-right: 10px;"></img>
+								</div><br><br><br><br><br><br>
+								
+						      	<a href="{% url 'Updatepost' post.id %}" class="btn btn-warning btn-sm">Update</a>
+						      	<a href="{% url 'deletepost' post.id %}" class="btn btn-danger">Delete</a><br><br>
+							{% endfor %}			
+						</form>
+				{% endif %}
+			{% endblock content %}
 			</div>
 	</div>
 

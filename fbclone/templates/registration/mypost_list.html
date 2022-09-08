@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+<body>
+	{% if request.user.is_authenticated %}
+	{% if post_list %}
+		{% for mypost in post_list %}
+			{{mypost.author}}<br>
+			{{mypost.title}}<br>
+			{{mypost.discription}}<br>
+			<img src="{% if mypost.photo %}{{ mypost.photo.url }}{%else%}#{% endif %}" class="img-responsive" style="width:500px; float: left; margin-right: 10px;"></img><br>
+		{% endfor %}
+	{% endif %}
+	{% endif %}
+	
+</body>
+</html>

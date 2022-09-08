@@ -14,6 +14,6 @@ class NewUserForm(UserCreationForm):
 class PostForm(forms.ModelForm):
 	class Meta:
 		model=Post
-		fields=['id','post_user','photo','title','discription',]
+		fields=['id','photo','title','discription']
 		labels={'photo':''}
 		
