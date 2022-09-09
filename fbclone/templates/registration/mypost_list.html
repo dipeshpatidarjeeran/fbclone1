@@ -1,21 +1,39 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title></title>
+	<link rel="stylesheet"  href="{% static './registration/css/bootstrap.min.css' %}">
 </head>
 <body>
-	{% if request.user.is_authenticated %}
-	{% if post_list %}
-		{% for mypost in post_list %}
-			{{mypost.author}}<br>
-			{{mypost.title}}<br>
-			{{mypost.discription}}<br>
-			<img src="{% if mypost.photo %}{{ mypost.photo.url }}{%else%}#{% endif %}" class="img-responsive" style="width:500px; float: left; margin-right: 10px;"></img><br>
-		{% endfor %}
-	{% endif %}
-	{% endif %}
-	
+	<h2 class="text-center alert alert-info ">{{user.username }} Post</h2>
+	<div class="text-center">
+		<a href="{% url 'profile' %}" class="btn btn-info">Back</a>
+		<a href="{% url 'home' %}" class="btn btn-outline-danger">Logout</a>
+	</div>
+	<hr>
+	<div class="row">
+		<div class="col-sm-4 offset-4">
+				{% if post_list %}
+					{% for mypost in post_list %}
+						<div class="text-center">
+							<a href="{% url 'Userdetail' mypost.author_id %}">{{mypost.author}}</a><br>
+							<strong>{{mypost.title}}</strong><br>
+							{{mypost.discription}}<br>
+						</div>
+						<a href="{% url 'showimagedetail' mypost.id %}">
+						<img src="{% if mypost.photo %}{{ mypost.photo.url }}{%else%}#{% endif %}" class="img-responsive" style="width:500px; float: left; margin-right: 10px;"></img></a><br>
+						{{mypost.created_on}}
+						<br>
+						<a href="{% url 'Updatepost' mypost.id %}" class="btn btn-warning btn-sm">Update</a>
+						<a href="{% url 'deletepost' mypost.id %}" class="btn btn-danger">Delete</a><br><br>
+						<hr>
+					{% endfor %}
+				{% endif %}
+			
+		</div>
+	</div>
 </body>
 </html>

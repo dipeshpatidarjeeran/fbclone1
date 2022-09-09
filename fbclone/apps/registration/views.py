@@ -22,7 +22,7 @@ class PostListView(ListView):
 	success_url=reverse_lazy('createpost')
 	template_name='registration/profile.html'
 	
-class CreatePost(LoginRequiredMixin,generic.CreateView):
+class CreatePost(generic.CreateView):
 	model=User
 	form_class=PostForm
 	template_name='registration/createpost.html'
@@ -39,20 +39,41 @@ class UserDetailView(DetailView):
 	template_name='registration/user_detail.html'
 	context_object_name='details'
 
+
 class UpdatePostview(UpdateView):
 	model=Post
 	form_class=PostForm
 	template_name='registration/UpdatePost.html'
 	success_url=reverse_lazy('profile')
+	def get_queryset(self):
+		user = self.request.user
+		return Post.objects.filter(author=user)
+
 
 class DeletePostview(DeleteView):
 	model=Post
 	success_url=reverse_lazy('profile')
+	def get_queryset(self):
+		user = self.request.user
+		return Post.objects.filter(author=user)
 
 class MyPostView(ListView):
 	model=Post
 	template_name='registration/mypost_list.html'
+	def get_queryset(self):
+		user = self.request.user
+		return Post.objects.filter(author=user)
 
+class ShowImageDetail(DetailView):
+	model=Post
+	template_name='registration/showImage.html'
+	context_object_name='showimage'
 
-	
-		
+class UpdateProfileView(UpdateView):
+	model=User
+	fields=['username','first_name','last_name','email']
+	template_name='registration/UpdateProfile.html'
+	success_url=reverse_lazy('profile')
+	def get_queryset(self):
+		user = self.request.user
+		return User.objects.filter(username=user)	

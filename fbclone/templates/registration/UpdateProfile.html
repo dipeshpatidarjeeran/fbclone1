@@ -9,17 +9,15 @@
 
 </head>
 <body>
-
 <div class="row">
 	<div class="col-sm-4 offset-4">
-		<h4 class="text-center alert alert-info" >Update post</h4>
+		<h4 class="text-center alert alert-info" >Update Profile</h4>
 		<form action="" method="POST">
-		
+			
 			{% csrf_token %}
 			{{form.as_p}}
 			<input type="submit" name="Update post"  class="btn btn-success" />
 			<a href="{% url 'profile' %}" class="btn btn-info">Back</a>
-
 		</form>
 	</div>
 </div>

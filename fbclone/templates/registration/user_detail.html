@@ -12,14 +12,18 @@
 	<div class="row">
 		<div class="col-sm-4 offset-4">
 			<h2 class="text-center alert alert-info">User detail</h2>
-			{% if details %}
-				Name:-{{details.username}}<br>
-				firstName:-{{details.first_name}}<br>
-				LastName:-{{details.last_name}}<br>
-				Email:-{{details.email}}<br>
-			{% endif %}
-			<a href="{% url 'profile' %}" class="btn btn-success">Back</a>
+			
+				{% if details %}
+					Name:-{{details.username}}<br>
+					firstName:-{{details.first_name}}<br>
+					LastName:-{{details.last_name}}<br>
+					Email:-{{details.email}}<br>
+				{% endif %}
+				<a href="{% url 'profile' %}" class="btn btn-success">Back</a>
+				<a href="{% url 'updateprofile' details.id %}" class="btn btn-info">Update Profile</a>
+			
 		</div>
 	</div>
+
 </body>
 </html>

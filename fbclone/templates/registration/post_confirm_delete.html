@@ -11,12 +11,14 @@
 <body>
 	<div class="row" style="text-align: center;">
 		<div class="col-sm-4 offset-4">
-			<form action="" method="POST">
-				<h2>Are You Sure!</h2>
-				{% csrf_token %}
-				<input type="submit" value="Delete" class="btn btn-danger">
-				<a href="{% url 'profile' %}" class="btn btn-success">Cancel</a>		
-			</form>
+			
+				<form action="" method="POST">
+					<h2>Are You Sure!</h2>
+					{% csrf_token %}
+					<input type="submit" value="Delete" class="btn btn-danger">
+					<a href="{% url 'profile' %}" class="btn btn-success">Cancel</a>		
+				</form>
+			
 		</div>
 	</div>
 </body>
