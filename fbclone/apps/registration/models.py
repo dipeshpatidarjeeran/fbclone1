@@ -10,8 +10,11 @@ class Post(models.Model):
 	title=models.CharField(max_length=70)
 	discription=models.TextField(max_length=140)
 	created_on = models.DateTimeField(auto_now_add=True,blank=True)
+	liked=models.ManyToManyField(User,default=None,blank=True,related_name='liked')
 	class Meta:
 		 ordering = ('-created_on',)
 
 	def __str__(self):
-		return str(self.author) 
+		return str(self.author)
+	def num_liked(self):
+		return self.liked.count() 

@@ -16,8 +16,13 @@
 				{{showimage.author}}<br>
 				<strong>{{showimage.title}}</strong><br>
 				{{showimage.discription}}<br>
+				
 			</div>
 			<img src="{% if showimage.photo %}{{ showimage.photo.url }}{%else%}#{% endif %}" class="img-responsive" style="width:500px; float: left; margin-right: 10px;"></img><br>
+			{% if showimage.author_id == user.id %}
+				<a href="{% url 'Updatepost' showimage.id  %}" class="btn btn-warning btn-sm">Update</a>
+				<a href="{% url 'deletepost' showimage.id %}" class="btn btn-danger">Delete</a>
+			{% endif %}  	
 		{% endif %}
 		<a href="{% url 'profile' %}" class="btn btn-success">Back</a>
 	</div>

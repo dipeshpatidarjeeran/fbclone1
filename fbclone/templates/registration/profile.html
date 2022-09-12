@@ -29,13 +29,20 @@
 									<a href="{% url 'Userdetail' post.author_id %}">{{post.author}}</a><br>
 									<strong>{{post.title}}</strong><br>
 									{{post.discription}}<br>
+									{% if post.photo %}
 									<a href="{% url 'showimagedetail' post.id %}">
 										<img src="{% if post.photo %}{{ post.photo.url }}{%else%}#{% endif %}" class="img-responsive" style="width:500px; float: left; margin-right: 10px;"></img></a>
 									<br><br><br><br><br><br>
+									{% endif %}
 								</div>	
 								{{post.created_on}}<br>
-								<a href="{% url 'Updatepost' post.id %}" class="btn btn-warning btn-sm">Update</a>
-						      	<a href="{% url 'deletepost' post.id %}" class="btn btn-danger">Delete</a><br><br><hr>
+								{% if post.author_id == user.id %}
+									<a href="{% url 'Updatepost' post.id  %}" class="btn btn-warning btn-sm">Update</a>
+							      	<a href="{% url 'deletepost' post.id %}" class="btn btn-danger">Delete</a><br><br><hr>
+							    {% else %}
+							    	<a href="{% url 'notvalid' %}" class="btn btn-warning btn-sm">Update</a>
+							      	<a href="{% url 'notvalid' %}" class="btn btn-danger">Delete</a><br><br><hr>
+							    {% endif %}  	
 							{% endfor %}			
 						</form>
 

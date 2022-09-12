@@ -16,12 +16,12 @@
 		<h2 class="mb-3">Create Post</h2>
 		<form action="" method="POST" enctype="multipart/form-data">
 			<h2>{{ request.user.username }}</h2><br>
-			{%if form %}
+			
 				{% csrf_token %}
 				{%for fm in form %}
 					{{fm.label}} {{fm}}	<br><br>
 				{% endfor %}
-			{% endif %}
+			
 			<input type="submit" value="Upload" class="btn btn-outline-primary"></input>
 			
 			<a href="{% url 'profile' %}" class="btn btn-success">Back</a>
