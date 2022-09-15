@@ -18,3 +18,13 @@ class Post(models.Model):
 		return str(self.author)
 	def num_liked(self):
 		return self.liked.count() 
+
+LIKE_CHOICES=(('Like','Like'),('Unlike','Unlike'))
+
+class Like(models.Model):
+	user=models.ForeignKey(User,on_delete=models.CASCADE)
+	post=models.ForeignKey(Post,on_delete=models.CASCADE)
+	value=models.CharField(choices=LIKE_CHOICES,default='Like',max_length=70)
+
+	def __str__(self):
+		return str(self.post)

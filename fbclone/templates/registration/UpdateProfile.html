@@ -13,11 +13,12 @@
 	<div class="col-sm-4 offset-4">
 		<h4 class="text-center alert alert-info" >Update Profile</h4>
 		<form action="" method="POST">
-			
+		{% if request.user.is_authenticated %}	
 			{% csrf_token %}
 			{{form.as_p}}
 			<input type="submit" name="Update post"  class="btn btn-success" />
 			<a href="{% url 'profile' %}" class="btn btn-info">Back</a>
+		{% endif %}
 		</form>
 	</div>
 </div>

@@ -20,10 +20,11 @@
 					Email:-{{details.email}}<br>
 				{% endif %}
 				<a href="{% url 'profile' %}" class="btn btn-success">Back</a>
-				
-				<a href="{% url 'updateprofile' details.id %}" class="btn btn-info">Update Profile</a>
-			
-			
+				{% if details.id == user.id %}
+					<a href="{% url 'updateprofile' details.id %}" class="btn btn-info">Update Profile</a>
+				{% else %}
+					<a href="{% url 'notvalid' %}" class="btn btn-danger">Update Profile</a>
+				{% endif %}
 		</div>
 	</div>
 

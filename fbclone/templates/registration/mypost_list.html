@@ -16,6 +16,7 @@
 	<hr>
 	<div class="row">
 		<div class="col-sm-4 offset-4">
+			{% if request.user.is_authenticated %}
 				{% if post_list %}
 					{% for mypost in post_list %}
 						<div class="text-center">
@@ -27,18 +28,47 @@
 						<img src="{% if mypost.photo %}{{ mypost.photo.url }}{%else%}#{% endif %}" class="img-responsive" style="width:500px; float: left; margin-right: 10px;"></img></a><br>
 						{{mypost.created_on}}
 						<br>
-						<form action="{% url 'like_post' mypost.id %}" method="POST">
+						<form action="{% url 'like_post'%}" method="POST">
 							{% csrf_token %}
-							<button type="submit" name="post_id" value="{{mypost.id}}" class="btn btn-primary">Like</button> - {{total_likes}}
+							<input type="hidden" name="mypost_id" value="{{mypost.id}}">
+							{% if user not in mypost.liked.all %}
+								<button type="submit" value="{{mypost.id}}" name="mypost_id" class="btn btn-primary">like</button>
+							{%else%}
+								<button type="submit" value="{{mypost.id}}" name="mypost_id" class="btn btn-primary">Unlike</button>
+							{% endif %}
 						</form>
-							<a href="{% url 'Updatepost' mypost.id %}" class="btn btn-warning btn-sm">Update</a>
-							<a href="{% url 'deletepost' mypost.id %}" class="btn btn-danger">Delete</a><br><br>
+						
+						<a href="{% url 'Updatepost' mypost.id %}" class="btn btn-warning btn-sm">Update</a>
+						<a href="{% url 'deletepost' mypost.id %}" class="btn btn-danger">Delete</a><br><br>
 						
 						<hr>
 					{% endfor %}
 				{% endif %}
-			
+			{% endif %}
 		</div>
 	</div>
+	
 </body>
+<!--
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js">
+	<script>
+	$('.likin').click(function(){
+		$.ajax({
+			type:"POST",
+			
+			data:{'mypost_id':$(this).attr(name),'csrfmiddlewaretoken':'{{csrf_token}}'},
+			dataType:"json",
+			success:function(response){
+				seletor=document.getElementByName(response.mypost_id);
+				if(response.likes==true){
+					$(seletor).html("like");
+				}
+				else if(response.likes==false){
+					$(seletor).html("dislike");
+				}
+			}
+		});
+	};
+</script>
+-->
 </html>
