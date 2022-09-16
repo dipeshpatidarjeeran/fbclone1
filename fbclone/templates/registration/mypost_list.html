@@ -11,7 +11,7 @@
 	<h2 class="text-center alert alert-info ">{{user.username }} Post</h2>
 	<div class="text-center">
 		<a href="{% url 'profile' %}" class="btn btn-info">Back</a>
-		<a href="{% url 'logout' %}" class="btn btn-outline-danger">Logout</a>
+		<a href="{% url 'home' %}" class="btn btn-outline-danger">Logout</a>
 	</div>
 	<hr>
 	<div class="row">
@@ -33,16 +33,15 @@
 								{% csrf_token %}
 								<input type="hidden" name="mypost_id" value="{{mypost.id}}">
 								{% if user not in mypost.likes.all %}
-									<button type="submit" value="{{mypost.id}}" id="btn" name="mypost_id" class="btn btn-primary">like</button>
-								{%else%}
-									<button type="submit" value="{{mypost.id}}" id="btn" name="mypost_id" class="btn btn-danger">Unlike</button>
+									<button type="submit" value="{{mypost.id}}" id="like-btn" name="mypost_id" class="likin">like</button>
+								{% else %}
+									<button type="submit" value="{{mypost.id}}" id="like-btn" name="mypost_id" class="likin">Unlike</button>
 								{% endif %}
 								{{ mypost.likes.all.count}}
 							</form>
 						</div>
 						<a href="{% url 'Updatepost' mypost.id %}" class="btn btn-warning btn-sm">Update</a>
 						<a href="{% url 'deletepost' mypost.id %}" class="btn btn-danger">Delete</a><br><br>
-						
 						<hr>
 					{% endfor %}
 				{% endif %}
@@ -54,10 +53,9 @@
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js">
 	<script>
-	$(document).ready(function(event){
-		$('button').on('click' '#btn' function(event){
+	
+		$('.likin').click(function(){
 			debugger
-			event.preventDefault();
 			var post_id=$(this).attr('value');
 			$.ajax({
 				type:"POST",
@@ -70,6 +68,6 @@
 			});
 		});
 		
-	});
+	
 </script>
 </html>

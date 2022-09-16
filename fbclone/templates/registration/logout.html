@@ -6,6 +6,10 @@
 	<title></title>
 </head>
 <body>
-	<h4>gfsfgfg</h4>
+	<form action="{% url 'home' %}">
+		{% csrf_token %}
+		<input type="submit" name="conform">
+		<a href="{% url 'profile' %}">Back</a>
+	</form>
 </body>
 </html>
