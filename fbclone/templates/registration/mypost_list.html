@@ -11,7 +11,7 @@
 	<h2 class="text-center alert alert-info ">{{user.username }} Post</h2>
 	<div class="text-center">
 		<a href="{% url 'profile' %}" class="btn btn-info">Back</a>
-		<a href="{% url 'home' %}" class="btn btn-outline-danger">Logout</a>
+		<a href="{% url 'logout' %}" class="btn btn-outline-danger">Logout</a>
 	</div>
 	<hr>
 	<div class="row">
@@ -28,16 +28,18 @@
 						<img src="{% if mypost.photo %}{{ mypost.photo.url }}{%else%}#{% endif %}" class="img-responsive" style="width:500px; float: left; margin-right: 10px;"></img></a><br>
 						{{mypost.created_on}}
 						<br>
-						<form action="{% url 'like_post'%}" method="POST">
-							{% csrf_token %}
-							<input type="hidden" name="mypost_id" value="{{mypost.id}}">
-							{% if user not in mypost.liked.all %}
-								<button type="submit" value="{{mypost.id}}" name="mypost_id" class="btn btn-primary">like</button>
-							{%else%}
-								<button type="submit" value="{{mypost.id}}" name="mypost_id" class="btn btn-primary">Unlike</button>
-							{% endif %}
-						</form>
-						
+						<div class="like-section">
+							<form action="{% url 'like_post' %}" method="POST">
+								{% csrf_token %}
+								<input type="hidden" name="mypost_id" value="{{mypost.id}}">
+								{% if user not in mypost.likes.all %}
+									<button type="submit" value="{{mypost.id}}" id="btn" name="mypost_id" class="btn btn-primary">like</button>
+								{%else%}
+									<button type="submit" value="{{mypost.id}}" id="btn" name="mypost_id" class="btn btn-danger">Unlike</button>
+								{% endif %}
+								{{ mypost.likes.all.count}}
+							</form>
+						</div>
 						<a href="{% url 'Updatepost' mypost.id %}" class="btn btn-warning btn-sm">Update</a>
 						<a href="{% url 'deletepost' mypost.id %}" class="btn btn-danger">Delete</a><br><br>
 						
@@ -49,26 +51,25 @@
 	</div>
 	
 </body>
-<!--
+
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js">
 	<script>
-	$('.likin').click(function(){
-		$.ajax({
-			type:"POST",
-			
-			data:{'mypost_id':$(this).attr(name),'csrfmiddlewaretoken':'{{csrf_token}}'},
-			dataType:"json",
-			success:function(response){
-				seletor=document.getElementByName(response.mypost_id);
-				if(response.likes==true){
-					$(seletor).html("like");
+	$(document).ready(function(event){
+		$('button').on('click' '#btn' function(event){
+			debugger
+			event.preventDefault();
+			var post_id=$(this).attr('value');
+			$.ajax({
+				type:"POST",
+				url:"{% url 'like_post' %}",
+				data:{'id':post_id,'csrfmiddlewaretoken':'{{csrf_token}}'},
+				dataType:"json",
+				success:function(data){
+					$('.like-section').html(data)
 				}
-				else if(response.likes==false){
-					$(seletor).html("dislike");
-				}
-			}
+			});
 		});
-	};
+		
+	});
 </script>
--->
 </html>

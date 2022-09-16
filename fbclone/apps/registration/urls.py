@@ -2,8 +2,10 @@ from django.urls import path
 from .views import SignUpView,HomeView
 from .views import PostListView,CreatePost,UserDetailView,UpdatePostview,DeletePostview,MyPostView,ShowImageDetail
 from .views import UpdateProfileView,NotValidView,like_PostView
+from django.contrib.auth import views 
 urlpatterns=[
 	path('', HomeView.as_view(), name='home'),
+	#path('logout/',logoutuser.LogoutView.as_view(template_name='registration/logout.html'),name='logout'),
 	path('signup/', SignUpView.as_view(), name='signup'),
 	path('profile/',PostListView.as_view(),name="profile"),
 	path('create/',CreatePost.as_view(),name='createpost'),

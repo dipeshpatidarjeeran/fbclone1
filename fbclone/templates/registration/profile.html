@@ -14,7 +14,7 @@
 	<div class="text-center">
 		<a href="{% url 'mypost' user.id %}" class="btn btn-outline-secondary">My Post</a>
 		<a href="{% url 'createpost' %}" class="btn btn-info">Create Post</a>
-		<a href="{% url 'home' %}" class="btn btn-outline-danger">Logout</a>
+		<a href="{% url 'logout' %}" class="btn btn-outline-danger">Logout</a>
 	</div>
 	<hr>
 	<div class="row">
@@ -35,8 +35,6 @@
 									{% endif %}
 								</div>	
 								{{post.created_on}}<br>
-								
-								
 							</form>
 								{% if post.author_id == user.id %}
 									<a href="{% url 'Updatepost' post.id  %}" class="btn btn-warning btn-sm">Update</a>
