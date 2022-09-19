@@ -60,6 +60,14 @@ class DeletePostview(DeleteView):
 class MyPostView(ListView):
 	model=Post
 	template_name='registration/mypost_list.html'
+	'''def get_context_data(self,**kwargs):
+		data=super().get_context_data(**kwargs)
+		likes_connected=get_object_or_404(Post,id=self.kwargs['pk'])
+		liked=False
+		if likes_connected.likes.filter(id=self.request.user.id).exists():
+			liked=True
+		data['total_likes']=likes_connected.num_liked()
+		data['post_is_like']=liked'''
 	def get_queryset(self):
 		user = self.request.user
 		return Post.objects.filter(author=user)
@@ -90,11 +98,11 @@ def like_PostView(request):
 		current_likes=mypost_obj.likes
 		if user in mypost_obj.likes.all():
 			mypost_obj.likes.remove(user)
-			current_likes=current_likes-1
+			#current_likes=current_likes-1
 		else:
 			mypost_obj.likes.add(user)
-			current_likes=current_likes+1
-		mypost_obj.likes=current_likes
+			#current_likes=current_likes+1
+		#mypost_obj.likes=current_likes
 		mypost_obj.save()
 		like,created=Like.objects.get_or_create(user=user,post_id=mypost_id)
 		if not created:
@@ -103,4 +111,4 @@ def like_PostView(request):
 			else:
 				like.value='like'
 		like.save()
-		return redirect('like_post')
+		return redirect('/accounts/profile')

@@ -6,6 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title></title>
 	<link rel="stylesheet"  href="{% static './registration/css/bootstrap.min.css' %}">
+
 </head>
 <body>
 	<h2 class="text-center alert alert-info ">{{user.username }} Post</h2>
@@ -28,18 +29,16 @@
 						<img src="{% if mypost.photo %}{{ mypost.photo.url }}{%else%}#{% endif %}" class="img-responsive" style="width:500px; float: left; margin-right: 10px;"></img></a><br>
 						{{mypost.created_on}}
 						<br>
-						<div class="like-section">
 							<form action="{% url 'like_post' %}" method="POST">
 								{% csrf_token %}
 								<input type="hidden" name="mypost_id" value="{{mypost.id}}">
 								{% if user not in mypost.likes.all %}
-									<button type="submit" value="{{mypost.id}}" id="like-btn" name="mypost_id" class="likin">like</button>
+									<button  value="{{mypost.id}}" name="mypost_id" class="likin">like</button>
 								{% else %}
-									<button type="submit" value="{{mypost.id}}" id="like-btn" name="mypost_id" class="likin">Unlike</button>
+									<button  value="{{mypost.id}}" name="mypost_id" class="likin">Unlike</button>
 								{% endif %}
 								{{ mypost.likes.all.count}}
 							</form>
-						</div>
 						<a href="{% url 'Updatepost' mypost.id %}" class="btn btn-warning btn-sm">Update</a>
 						<a href="{% url 'deletepost' mypost.id %}" class="btn btn-danger">Delete</a><br><br>
 						<hr>
@@ -50,24 +49,29 @@
 	</div>
 	
 </body>
-
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js">
+<script>
 	<script>
 	
 		$('.likin').click(function(){
-			debugger
+			
 			var post_id=$(this).attr('value');
 			$.ajax({
 				type:"POST",
 				url:"{% url 'like_post' %}",
 				data:{'id':post_id,'csrfmiddlewaretoken':'{{csrf_token}}'},
 				dataType:"json",
-				success:function(data){
-					$('.like-section').html(data)
+				success:function(response){
+					selector=document.getElementsByName(response.id);
+					if(response.liked=='like'){
+						$(selector)=html('Unline')
+					}
+					else{
+						$(selector)=html('like')
+					}
 				}
 			});
 		});
 		
-	
-</script>
+	</script>
+
 </html>

@@ -20,7 +20,7 @@
 	<div class="row">
 		<div class="col-sm-4 offset-4">
 			{% block content %} 
-						<form action="" method="POST">
+						<form action="{% url 'like_post' %}" method="POST">
 							{% csrf_token %}
 							<br><br><br>
 							{% for post in  post_list %}	
@@ -34,8 +34,14 @@
 										<br><br><br><br><br><br>
 									{% endif %}
 								</div>	
-								{{post.created_on}}<br>
-							</form>
+								{{post.created_on}}<br>							
+								{% if user not in post.likes.all %}
+									<button value="{{post.id}}" name="mypost_id" class="likin">like</button>
+								{% else %}
+									<button value="{{post.id}}" name="mypost_id" class="likin">Unlike</button>
+								{% endif %}
+								{{ post.likes.all.count}}
+							
 								{% if post.author_id == user.id %}
 									<a href="{% url 'Updatepost' post.id  %}" class="btn btn-warning btn-sm">Update</a>
 							      	<a href="{% url 'deletepost' post.id %}" class="btn btn-danger">Delete</a><br><br><hr>
@@ -51,4 +57,32 @@
 	</div>
 	{% endif %}
 </body>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.likin').click(function(evnet){
+			event.preventDefault();
+			var post_id=$(this).attr('value');
+			
+			$.ajax({
+				type:"POST",
+				url:"127.0.0.1:8000/accounts/profile/",
+				data:{'id':post_id,'csrfmiddlewaretoken':'{{csrf_token}}'},
+				dataType:"json",
+				success:function(){
+					
+					selector=document.getElementsByName(response.id);
+					if(response.liked=='like'){
+						$(selector)=html('Unline');
+					}
+					else{
+						$(selector)=html('like');
+					}
+				}
+			});
+		});
+	});	
+	</script>
 </html>
