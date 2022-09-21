@@ -31,17 +31,19 @@
 						<br>
 							<form action="{% url 'like_post' %}" method="POST" class="like-form" id='{{post.id}}'>
 									{% csrf_token %}	
+									<div class="like-count{{post.id}}">{{ post.likes.all.count}}</div>
 									<div id="like-section">					
 										{% if user not in post.likes.all %}
 											<button value="{{post.id}}" name="post_id" class="likin{{post.id}}">like</button>
 										{% else %}
 											<button value="{{post.id}}" name="post_id"  class="likin{{post.id}}">Unlike</button>
 										{% endif %}
-										<div class="like-count{{post.id}}">{{ post.likes.all.count}}</div>
+										
 									</div>	
 							</form>
 						<a href="{% url 'Updatepost' post.id %}" class="btn btn-warning btn-sm">Update</a>
-						<a href="{% url 'deletepost' post.id %}" class="btn btn-danger">Delete</a><br><br>
+						<a href="{% url 'deletepost' post.id %}" class="btn btn-danger">Delete</a>
+						<button class="btn btn-outline-primary">Add Comments</button>
 						<hr>
 					{% endfor %}
 				{% endif %}
