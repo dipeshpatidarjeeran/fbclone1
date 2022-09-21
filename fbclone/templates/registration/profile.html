@@ -20,8 +20,6 @@
 	<div class="row">
 		<div class="col-sm-4 offset-4">
 			{% block content %} 
-						<form action="{% url 'like_post' %}" method="POST">
-							{% csrf_token %}
 							<br><br><br>
 							{% for post in  post_list %}	
 								<div class="text-center">
@@ -34,14 +32,18 @@
 										<br><br><br><br><br><br>
 									{% endif %}
 								</div>	
-								{{post.created_on}}<br>							
-								{% if user not in post.likes.all %}
-									<button value="{{post.id}}" name="mypost_id" class="likin">like</button>
-								{% else %}
-									<button value="{{post.id}}" name="mypost_id" class="likin">Unlike</button>
-								{% endif %}
-								{{ post.likes.all.count}}
-							
+								{{post.created_on}}<br>	
+								<form action="{% url 'like_post' %}" method="POST" class="like-form" id='{{post.id}}'>
+									{% csrf_token %}	
+									<div id="like-section">					
+										{% if user not in post.likes.all %}
+											<button value="{{post.id}}" name="post_id" class="likin{{post.id}}">like</button>
+										{% else %}
+											<button value="{{post.id}}" name="post_id"  class="likin{{post.id}}">Unlike</button>
+										{% endif %}
+										<div class="like-count{{post.id}}">{{ post.likes.all.count}}</div>
+									</div>	
+								</form>
 								{% if post.author_id == user.id %}
 									<a href="{% url 'Updatepost' post.id  %}" class="btn btn-warning btn-sm">Update</a>
 							      	<a href="{% url 'deletepost' post.id %}" class="btn btn-danger">Delete</a><br><br><hr>
@@ -51,37 +53,48 @@
 							    {% endif %} 
 							    
 							{% endfor %}			
-						</form>
+						
 			{% endblock content %}
 			</div>
 	</div>
 	{% endif %}
 </body>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="{% static 'enroll/js/jquery.js'%}"></script>
+<script src="{% static 'enroll/js/popper.js'%}"></script>
+<script src="{% static 'enroll/js/bootstrap.min.js'%}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
-		$('.likin').click(function(evnet){
-			event.preventDefault();
-			var post_id=$(this).attr('value');
-			
+		$('.like-form').submit(function(e){
+			e.preventDefault()
+			const post_id=$(this).attr('id')
+			const likeText=$(`.likin${post_id}`).text()
+			const trim=$.trim(likeText)
+			const url=$(this).attr('action')
+			let res;
+			const likes=$(`.like-count${post_id}`).text()
+			const trimcount=parseInt(likes)
 			$.ajax({
-				type:"POST",
-				url:"127.0.0.1:8000/accounts/profile/",
-				data:{'id':post_id,'csrfmiddlewaretoken':'{{csrf_token}}'},
-				dataType:"json",
-				success:function(){
-					
-					selector=document.getElementsByName(response.id);
-					if(response.liked=='like'){
-						$(selector)=html('Unline');
+				type:'POST',
+				url:url,
+				data:{
+					'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+					'post_id':post_id,
+				},
+				success: function(response){
+					if(trim === 'Unlike'){
+						$(`.likin${post_id}`).text('like')
+						res=trimcount-1
+					}else{
+						$(`.likin${post_id}`).text('Unlike')
+						res=trimcount+1
 					}
-					else{
-						$(selector)=html('like');
-					}
+					$(`.like-count${post_id}`).text(res)
+				},
+				error: function (response) {
+					console.log('error',response)
 				}
-			});
+			})
 		});
 	});	
 	</script>

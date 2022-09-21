@@ -10,7 +10,7 @@ class Post(models.Model):
 	title=models.CharField(max_length=70)
 	discription=models.TextField(max_length=10000)
 	created_on = models.DateTimeField(auto_now_add=True,blank=True)
-	likes=models.ManyToManyField(User,default=None,blank=True,related_name='liked')
+	likes=models.ManyToManyField(User,default=None,blank=True,related_name='likes')
 	class Meta:
 		 ordering = ('-created_on',)
 

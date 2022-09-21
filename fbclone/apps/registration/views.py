@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from .models import Post,Like
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,JsonResponse
 import json
 # Create your views here.
 class HomeView(TemplateView):
@@ -90,25 +90,28 @@ class UpdateProfileView(UpdateView):
 class NotValidView(TemplateView):
 	template_name='registration/notvaliduser.html'
 
-def like_PostView(request):
+def like_PostView(request):	
 	user=request.user
 	if request.method=='POST':
-		mypost_id=request.POST.get('mypost_id')
-		mypost_obj=Post.objects.get(id=mypost_id)
-		current_likes=mypost_obj.likes
-		if user in mypost_obj.likes.all():
-			mypost_obj.likes.remove(user)
-			#current_likes=current_likes-1
+		post_id=request.POST.get('post_id')
+		post_obj=Post.objects.get(id=post_id)
+		if user in post_obj.likes.all():
+			post_obj.likes.remove(user)
 		else:
-			mypost_obj.likes.add(user)
-			#current_likes=current_likes+1
-		#mypost_obj.likes=current_likes
-		mypost_obj.save()
-		like,created=Like.objects.get_or_create(user=user,post_id=mypost_id)
+			post_obj.likes.add(user)
+		like,created=Like.objects.get_or_create(user=user,post_id=post_id)
 		if not created:
 			if like.value=='like':
 				like.value='Unlike'
 			else:
 				like.value='like'
-		like.save()
-		return redirect('/accounts/profile')
+		else:
+			like.value='like'
+			post_obj.save()
+			like.save()
+		data={
+			'value':like.value,
+			'likes':post_obj.likes.all().count()
+		}
+		return JsonResponse(data,safe=False)
+	return redirect('/profile/')

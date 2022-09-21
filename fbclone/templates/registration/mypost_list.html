@@ -19,28 +19,29 @@
 		<div class="col-sm-4 offset-4">
 			{% if request.user.is_authenticated %}
 				{% if post_list %}
-					{% for mypost in post_list %}
+					{% for post in post_list %}
 						<div class="text-center">
-							<a href="{% url 'Userdetail' mypost.author_id %}">{{mypost.author}}</a><br>
-							<strong>{{mypost.title}}</strong><br>
-							{{mypost.discription}}<br>
+							<a href="{% url 'Userdetail' post.author_id %}">{{post.author}}</a><br>
+							<strong>{{post.title}}</strong><br>
+							{{post.discription}}<br>
 						</div>
-						<a href="{% url 'showimagedetail' mypost.id %}">
-						<img src="{% if mypost.photo %}{{ mypost.photo.url }}{%else%}#{% endif %}" class="img-responsive" style="width:500px; float: left; margin-right: 10px;"></img></a><br>
-						{{mypost.created_on}}
+						<a href="{% url 'showimagedetail' post.id %}">
+						<img src="{% if post.photo %}{{ post.photo.url }}{%else%}#{% endif %}" class="img-responsive" style="width:500px; float: left; margin-right: 10px;"></img></a><br>
+						{{post.created_on}}
 						<br>
-							<form action="{% url 'like_post' %}" method="POST">
-								{% csrf_token %}
-								<input type="hidden" name="mypost_id" value="{{mypost.id}}">
-								{% if user not in mypost.likes.all %}
-									<button  value="{{mypost.id}}" name="mypost_id" class="likin">like</button>
-								{% else %}
-									<button  value="{{mypost.id}}" name="mypost_id" class="likin">Unlike</button>
-								{% endif %}
-								{{ mypost.likes.all.count}}
+							<form action="{% url 'like_post' %}" method="POST" class="like-form" id='{{post.id}}'>
+									{% csrf_token %}	
+									<div id="like-section">					
+										{% if user not in post.likes.all %}
+											<button value="{{post.id}}" name="post_id" class="likin{{post.id}}">like</button>
+										{% else %}
+											<button value="{{post.id}}" name="post_id"  class="likin{{post.id}}">Unlike</button>
+										{% endif %}
+										<div class="like-count{{post.id}}">{{ post.likes.all.count}}</div>
+									</div>	
 							</form>
-						<a href="{% url 'Updatepost' mypost.id %}" class="btn btn-warning btn-sm">Update</a>
-						<a href="{% url 'deletepost' mypost.id %}" class="btn btn-danger">Delete</a><br><br>
+						<a href="{% url 'Updatepost' post.id %}" class="btn btn-warning btn-sm">Update</a>
+						<a href="{% url 'deletepost' post.id %}" class="btn btn-danger">Delete</a><br><br>
 						<hr>
 					{% endfor %}
 				{% endif %}
@@ -49,28 +50,44 @@
 	</div>
 	
 </body>
+<script src="{% static 'enroll/js/jquery.js'%}"></script>
+<script src="{% static 'enroll/js/popper.js'%}"></script>
+<script src="{% static 'enroll/js/bootstrap.min.js'%}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-	<script>
-	
-		$('.likin').click(function(){
-			
-			var post_id=$(this).attr('value');
+	$(document).ready(function(){
+		$('.like-form').submit(function(e){
+			e.preventDefault()
+			const post_id=$(this).attr('id')
+			const likeText=$(`.likin${post_id}`).text()
+			const trim=$.trim(likeText)
+			const url=$(this).attr('action')
+			let res;
+			const likes=$(`.like-count${post_id}`).text()
+			const trimcount=parseInt(likes)
 			$.ajax({
-				type:"POST",
-				url:"{% url 'like_post' %}",
-				data:{'id':post_id,'csrfmiddlewaretoken':'{{csrf_token}}'},
-				dataType:"json",
-				success:function(response){
-					selector=document.getElementsByName(response.id);
-					if(response.liked=='like'){
-						$(selector)=html('Unline')
+				type:'POST',
+				url:url,
+				data:{
+					'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+					'post_id':post_id,
+				},
+				success: function(response){
+					if(trim === 'Unlike'){
+						$(`.likin${post_id}`).text('like')
+						res=trimcount-1
+					}else{
+						$(`.likin${post_id}`).text('Unlike')
+						res=trimcount+1
 					}
-					else{
-						$(selector)=html('like')
-					}
+					$(`.like-count${post_id}`).text(res)
+				},
+				error: function (response) {
+					console.log('error',response)
 				}
-			});
+			})
 		});
+	});	
 		
 	</script>
 
