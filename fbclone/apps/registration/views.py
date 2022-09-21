@@ -2,10 +2,10 @@ from django.shortcuts import render,get_object_or_404,redirect
 from django.views.generic import TemplateView ,RedirectView,ListView,UpdateView,DeleteView
 from django.urls import reverse_lazy,reverse
 from django.views import generic	 
-from .forms import NewUserForm,PostForm
+from .forms import NewUserForm,PostForm,CommentForm
 from django.views import View
 from django.contrib.auth.models import User
-from .models import Post,Like
+from .models import Post,Like,Comment
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect,JsonResponse
@@ -115,3 +115,15 @@ def like_PostView(request):
 		}
 		return JsonResponse(data,safe=False)
 	return redirect('/profile/')
+
+class AddCommentView(generic.CreateView):
+	model=Comment
+	form_class=CommentForm
+	template_name='registration/comments.html'
+	def form_valid(self,form):
+		import pdb;pdb.set_trace()
+		obj = form.save(commit=False)
+		obj.user=self.request.user
+		obj.post=self.request.post
+		obj.save()
+		return super().form_valid(form)

@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Post
+from .models import Post,Comment
 
 class NewUserForm(UserCreationForm):
 	#firstname=forms.TextInput()
@@ -16,4 +16,9 @@ class PostForm(forms.ModelForm):
 		model=Post
 		fields=['id','photo','title','discription']
 		labels={'photo':''}
+
+class CommentForm(forms.ModelForm):
+	class Meta:
+		model=Comment
+		fields=['content',]
 		

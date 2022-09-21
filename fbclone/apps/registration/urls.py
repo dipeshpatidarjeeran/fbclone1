@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import SignUpView,HomeView
 from .views import PostListView,CreatePost,UserDetailView,UpdatePostview,DeletePostview,MyPostView,ShowImageDetail
-from .views import UpdateProfileView,NotValidView,like_PostView
+from .views import UpdateProfileView,NotValidView,like_PostView,AddCommentView
 from django.contrib.auth import views 
 urlpatterns=[
 	path('', HomeView.as_view(), name='home'),
@@ -17,4 +17,5 @@ urlpatterns=[
 	path('updateProfile/<int:pk>',UpdateProfileView.as_view(),name='updateprofile'),
 	path('notvalid/',NotValidView.as_view(),name='notvalid'),
 	path('like/',like_PostView,name='like_post'),
+	path('artical/<int:pk>/comment/',AddCommentView.as_view(),name='add_comment'),
 ]

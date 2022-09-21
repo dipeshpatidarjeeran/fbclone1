@@ -1,0 +1,13 @@
+
+{% block content %}
+<div class="form-group">
+	<h1>Add Comment</h1>
+	<h2>{{ request.user.username }}</h2><br>
+	<form action="" method="POST">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<button class="btn btn-outline-primary">add comment</button>
+	</form>
+</div>
+	
+{% endblock content %}
