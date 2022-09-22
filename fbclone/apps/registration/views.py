@@ -56,6 +56,11 @@ class DeletePostview(DeleteView):
 	def get_queryset(self):
 		user = self.request.user
 		return Post.objects.filter(author=user)
+
+class DeleteCommentView(DeleteView):
+	model=Comment
+	success_url=reverse_lazy('profile')
+
 		
 class MyPostView(ListView):
 	model=Post
@@ -121,9 +126,9 @@ class AddCommentView(generic.CreateView):
 	form_class=CommentForm
 	template_name='registration/comments.html'
 	def form_valid(self,form):
-		import pdb;pdb.set_trace()
 		obj = form.save(commit=False)
 		obj.user=self.request.user
-		obj.post=self.request.post
+		obj.post_id=self.kwargs['pk']
 		obj.save()
 		return super().form_valid(form)
+	success_url=reverse_lazy('profile')

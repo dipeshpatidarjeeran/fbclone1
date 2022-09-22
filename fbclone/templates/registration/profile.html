@@ -9,53 +9,71 @@
 
 </head>
 <body>
-	{% if request.user.is_authenticated %}
-	<h4 class="text-center alert alert-info">hello {{user.username }}</h4>
-	<div class="text-center">
-		<a href="{% url 'mypost' user.id %}" class="btn btn-outline-secondary">My Post</a>
-		<a href="{% url 'createpost' %}" class="btn btn-info">Create Post</a>
-		<a href="{% url 'home' %}" class="btn btn-outline-danger">Logout</a>
-	</div>
-	<hr>
-	<div class="row">
-		<div class="col-sm-4 offset-4">
-							<br><br><br>
-							{% for post in  post_list %}	
-								<div class="text-center">
-									<a href="{% url 'Userdetail' post.author_id %}">{{post.author}}</a><br>
-									<strong>{{post.title}}</strong><br>
-									{{post.discription}}<br>
-									{% if post.photo %}
-										<a href="{% url 'showimagedetail' post.id %}">
-											<img src="{% if post.photo %}{{ post.photo.url }}{%else%}#{% endif %}" class="img-responsive" style="width:500px; float: left; margin-right: 10px;"></img></a>
-										<br><br><br><br><br><br>
-									{% endif %}
-								</div>	
-								{{post.created_on}}<br>	
-								<form action="{% url 'like_post' %}" method="POST" class="like-form" id='{{post.id}}'>
-									{% csrf_token %}	
-									<div id="like-section">					
-										{% if user not in post.likes.all %}
-											<button value="{{post.id}}" name="post_id" class="likin{{post.id}}">like</button>
-										{% else %}
-											<button value="{{post.id}}" name="post_id"  class="likin{{post.id}}">Unlike</button>
-										{% endif %}
-										<div class="like-count{{post.id}}">{{ post.likes.all.count}}</div>
-									</div>	
-								</form>
-								{% if post.author_id == user.id %}
-									<a href="{% url 'Updatepost' post.id  %}" class="btn btn-warning btn-sm">Update</a>
-							      	<a href="{% url 'deletepost' post.id %}" class="btn btn-danger">Delete</a><br><br><hr>
-							    {% else %}
-							    	<a href="{% url 'notvalid' %}" class="btn btn-warning btn-sm">Update</a>
-							      	<a href="{% url 'notvalid' %}" class="btn btn-danger">Delete</a><hr>
-							    {% endif %} 
-							    
-							{% endfor %}			
+{% if request.user.is_authenticated %}
+<h4 class="text-center alert alert-info">hello {{user.username }}</h4>
+<div class="text-center">
+	<a href="{% url 'mypost' user.id %}" class="btn btn-outline-secondary">My Post</a>
+	<a href="{% url 'createpost' %}" class="btn btn-info">Create Post</a>
+	<a href="{% url 'home' %}" class="btn btn-outline-danger">Logout</a>
+</div>
+<hr>
+<div class="row">
+	<div class="col-sm-4 offset-4">
+		<br><br><br>
+		{% for post in  post_list %}	
+			<div class="text-center">
+				<a href="{% url 'Userdetail' post.author_id %}">{{post.author}}</a><br>
+				<strong>{{post.title}}</strong><br>
+				{{post.discription}}<br>
+				{% if post.photo %}
+					<a href="{% url 'showimagedetail' post.id %}">
+						<img src="{% if post.photo %}{{ post.photo.url }}{%else%}#{% endif %}" class="img-responsive" style="width:500px; float: left; margin-right: 10px;"></img></a>
+						<br><br><br><br><br><br>
+					{% endif %}
+				</div>	
+				{{post.created_on}}<br>	
+				<form action="{% url 'like_post' %}" method="POST" class="like-form" id='{{post.id}}'>
+					{% csrf_token %}	
+					<div id="like-section">	
+						<div class="like-count{{post.id}}">{{ post.likes.all.count}}</div>				
+						{% if user not in post.likes.all %}
+							<button value="{{post.id}}" name="post_id" class="likin{{post.id}}">like</button>
+						{% else %}
+							<button value="{{post.id}}" name="post_id"  class="likin{{post.id}}">Unlike</button>
+						{% endif %}
 						
-			
-			</div>
+					</div>	
+				</form>
+				{% if post.author_id == user.id %}
+					<a href="{% url 'Updatepost' post.id  %}" class="btn btn-warning btn-sm">Update</a>
+			      	<a href="{% url 'deletepost' post.id %}" class="btn btn-danger">Delete</a><br><br>
+			    {% else %}
+			    	<a href="{% url 'notvalid' %}" class="btn btn-warning btn-sm">Update</a>
+			      	<a href="{% url 'notvalid' %}" class="btn btn-danger">Delete</a>
+			    {% endif %} 
+			    <!-- comments area -->
+		
+				<a  href="{% url 'add_comment' post.id %}"  class="btn btn-outline-primary">Add Comments</a><br>
+				<h2>Comments...</h2>   
+				{% if not post.comments.all %}
+					No comment yet...
+				{% else %}
+					{% for comment in post.comments.all %}
+						<strong>{{ comment.user}}-{{comment.create_on}}</strong><br>
+						{{comment.content}}
+						{% if comment.user_id == user.id %}
+							
+			      			<a href="{% url 'deletecomment' comment.id %}" >Delete</a>
+			   			 {% else %}
+					    	
+					      	<a href="{% url 'notvalid' %}" >Delete</a>
+			   			 {% endif %} 
+						<br>
+					{% endfor %}
+				{% endif %}<hr>	
+			{% endfor %}
 	</div>
+</div>
 	{% endif %}
 </body>
 <script src="{% static 'enroll/js/jquery.js'%}"></script>

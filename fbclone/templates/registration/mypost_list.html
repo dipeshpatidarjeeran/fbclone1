@@ -6,6 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title></title>
 	<link rel="stylesheet"  href="{% static './registration/css/bootstrap.min.css' %}">
+	<link rel="stylesheet"  href="http://127.0.0.1:8000/static/registration/css/bootstrap.min.css.map">
 
 </head>
 <body>
@@ -37,14 +38,33 @@
 											<button value="{{post.id}}" name="post_id" class="likin{{post.id}}">like</button>
 										{% else %}
 											<button value="{{post.id}}" name="post_id"  class="likin{{post.id}}">Unlike</button>
-										{% endif %}
-										
+										{% endif %}	
 									</div>	
 							</form>
 						<a href="{% url 'Updatepost' post.id %}" class="btn btn-warning btn-sm">Update</a>
 						<a href="{% url 'deletepost' post.id %}" class="btn btn-danger">Delete</a>
 						<!-- comments area -->
-						<a  href="{% url 'add_comment' post.id %}"  class="btn btn-outline-primary">Add Comments</a><br>	
+
+						<a  href=""  class="btn btn-outline-primary" data-toggle="modal" data-target="#modalpopup">Add Comments</a><br>
+						<div class="modal" tabindex="-1" role="dialog" id="modalpopup">
+						  <div class="modal-dialog" role="document">
+						    <div class="modal-content">
+						      <div class="modal-header">
+						        <h5 class="modal-title">Modal title</h5>
+						        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						          <span aria-hidden="true">&times;</span>
+						        </button>
+						      </div>
+						      <div class="modal-body">
+						        <p>Modal body text goes here.</p>
+						      </div>
+						      <div class="modal-footer">
+						        <button type="button" class="btn btn-primary">Save changes</button>
+						        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						      </div>
+						    </div>
+						  </div>
+						</div>
 						<h2>Comments...</h2>   
 						{% if not post.comments.all %}
 							No comment yet...
@@ -52,10 +72,16 @@
 							{% for comment in post.comments.all %}
 								<strong>{{ comment.user}}-{{comment.create_on}}</strong><br>
 								{{comment.content}}
+								{% if comment.user_id == user.id %}
+									
+					      			<a href="{% url 'deletecomment' comment.id %}" >Delete</a>
+					   			 {% else %}
+							    	
+							      	<a href="{% url 'notvalid' %}" >Delete</a>
+					   			 {% endif %} 
 								<br>
 							{% endfor %}
-						{% endif %}
-						<hr>
+						{% endif %}<hr>	
 					{% endfor %}
 				{% endif %}
 			{% endif %}
@@ -67,6 +93,7 @@
 <script src="{% static 'enroll/js/popper.js'%}"></script>
 <script src="{% static 'enroll/js/bootstrap.min.js'%}"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 <script>
 	$(document).ready(function(){
 		$('.like-form').submit(function(e){
@@ -86,7 +113,6 @@
 					'post_id':post_id,
 				},
 				success: function(response){
-					debugger
 					if(trim === 'Unlike'){
 						$(`.likin${post_id}`).text('like')
 						res=trimcount-1
