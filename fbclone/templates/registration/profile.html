@@ -8,6 +8,9 @@
 	<link rel="stylesheet"  href="{% static './registration/css/bootstrap.min.css' %}">
 
 </head>
+<style type="text/css">
+	
+</style>
 <body>
 {% if request.user.is_authenticated %}
 <h4 class="text-center alert alert-info">hello {{user.username }}</h4>
@@ -52,8 +55,13 @@
 			      	<a href="{% url 'notvalid' %}" class="btn btn-danger">Delete</a>
 			    {% endif %} 
 			    <!-- comments area -->
-		
-				<a  href="{% url 'add_comment' post.id %}"  class="btn btn-outline-primary">Add Comments</a><br>
+				<div class="btn-group btn-group-sm">
+				    <div id="comments">
+				        {% include 'registration/comment_popup.html' %}
+				    </div>
+				</div>
+				
+				
 				<h2>Comments...</h2>   
 				{% if not post.comments.all %}
 					No comment yet...

@@ -1,5 +1,5 @@
 from django.shortcuts import render,get_object_or_404,redirect
-from django.views.generic import TemplateView ,RedirectView,ListView,UpdateView,DeleteView
+from django.views.generic import TemplateView ,RedirectView,ListView,UpdateView,DeleteView,CreateView
 from django.urls import reverse_lazy,reverse
 from django.views import generic	 
 from .forms import NewUserForm,PostForm,CommentForm
@@ -65,14 +65,7 @@ class DeleteCommentView(DeleteView):
 class MyPostView(ListView):
 	model=Post
 	template_name='registration/mypost_list.html'
-	'''def get_context_data(self,**kwargs):
-		data=super().get_context_data(**kwargs)
-		likes_connected=get_object_or_404(Post,id=self.kwargs['pk'])
-		liked=False
-		if likes_connected.likes.filter(id=self.request.user.id).exists():
-			liked=True
-		data['total_likes']=likes_connected.num_liked()
-		data['post_is_like']=liked'''
+	
 	def get_queryset(self):
 		user = self.request.user
 		return Post.objects.filter(author=user)
@@ -121,10 +114,11 @@ def like_PostView(request):
 		return JsonResponse(data,safe=False)
 	return redirect('/profile/')
 
-class AddCommentView(generic.CreateView):
+class AddCommentView(CreateView):
+	
 	model=Comment
 	form_class=CommentForm
-	template_name='registration/comments.html'
+	template_name='registration/comment_popup.html'
 	def form_valid(self,form):
 		obj = form.save(commit=False)
 		obj.user=self.request.user

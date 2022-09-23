@@ -10,88 +10,92 @@
 
 </head>
 <body>
-	<h2 class="text-center alert alert-info ">{{user.username }} Post</h2>
-	<div class="text-center">
-		<a href="{% url 'profile' %}" class="btn btn-info">Back</a>
-		<a href="{% url 'home' %}" class="btn btn-outline-danger">Logout</a>
-	</div>
-	<hr>
-	<div class="row">
-		<div class="col-sm-4 offset-4">
-			{% if request.user.is_authenticated %}
-				{% if post_list %}
-					{% for post in post_list %}
-						<div class="text-center">
-							<a href="{% url 'Userdetail' post.author_id %}">{{post.author}}</a><br>
-							<strong>{{post.title}}</strong><br>
-							{{post.discription}}<br>
-						</div>
-						<a href="{% url 'showimagedetail' post.id %}">
-						<img src="{% if post.photo %}{{ post.photo.url }}{%else%}#{% endif %}" class="img-responsive" style="width:500px; float: left; margin-right: 10px;"></img></a><br>
-						{{post.created_on}}
-						<br>
-							<form action="{% url 'like_post' %}" method="POST" class="like-form" id='{{post.id}}'>
-									{% csrf_token %}	
-									<div class="like-count{{post.id}}">{{ post.likes.all.count}}</div>
-									<div id="like-section">					
-										{% if user not in post.likes.all %}
-											<button value="{{post.id}}" name="post_id" class="likin{{post.id}}">like</button>
-										{% else %}
-											<button value="{{post.id}}" name="post_id"  class="likin{{post.id}}">Unlike</button>
-										{% endif %}	
-									</div>	
-							</form>
-						<a href="{% url 'Updatepost' post.id %}" class="btn btn-warning btn-sm">Update</a>
-						<a href="{% url 'deletepost' post.id %}" class="btn btn-danger">Delete</a>
-						<!-- comments area -->
 
-						<a  href=""  class="btn btn-outline-primary" data-toggle="modal" data-target="#modalpopup">Add Comments</a><br>
-						<div class="modal" tabindex="-1" role="dialog" id="modalpopup">
-						  <div class="modal-dialog" role="document">
-						    <div class="modal-content">
-						      <div class="modal-header">
-						        <h5 class="modal-title">Modal title</h5>
-						        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						          <span aria-hidden="true">&times;</span>
-						        </button>
-						      </div>
-						      <div class="modal-body">
-						        <p>Modal body text goes here.</p>
-						      </div>
-						      <div class="modal-footer">
-						        <button type="button" class="btn btn-primary">Save changes</button>
-						        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-						      </div>
-						    </div>
-						  </div>
-						</div>
-						<h2>Comments...</h2>   
-						{% if not post.comments.all %}
-							No comment yet...
-						{% else %}
-							{% for comment in post.comments.all %}
-								<strong>{{ comment.user}}-{{comment.create_on}}</strong><br>
-								{{comment.content}}
-								{% if comment.user_id == user.id %}
-									
-					      			<a href="{% url 'deletecomment' comment.id %}" >Delete</a>
-					   			 {% else %}
-							    	
-							      	<a href="{% url 'notvalid' %}" >Delete</a>
-					   			 {% endif %} 
-								<br>
-							{% endfor %}
-						{% endif %}<hr>	
-					{% endfor %}
-				{% endif %}
+<h2 class="text-center alert alert-info ">{{user.username }} Post</h2>
+<div class="text-center">
+	<a href="{% url 'profile' %}" class="btn btn-info">Back</a>
+	<a href="{% url 'home' %}" class="btn btn-outline-danger">Logout</a>
+</div>
+<hr>
+<div class="row">
+	<div class="col-sm-4 offset-4">
+		
+		{% if request.user.is_authenticated %}
+			{% if post_list %}
+				{% for post in post_list %}
+					<div class="text-center">
+						<a href="{% url 'Userdetail' post.author_id %}">{{post.author}}</a><br>
+						<strong>{{post.title}}</strong><br>
+						{{post.discription}}<br>
+					</div>
+					<a href="{% url 'showimagedetail' post.id %}">
+					<img src="{% if post.photo %}{{ post.photo.url }}{%else%}#{% endif %}" class="img-responsive" style="width:500px; float: left; margin-right: 10px;"></img></a><br>
+					{{post.created_on}}
+					<br>
+						<form action="{% url 'like_post' %}" method="POST" class="like-form" id='{{post.id}}'>
+								{% csrf_token %}	
+								<div class="like-count{{post.id}}">{{ post.likes.all.count}}</div>
+								<div id="like-section">					
+									{% if user not in post.likes.all %}
+										<button value="{{post.id}}" name="post_id" class="likin{{post.id}}">like</button>
+									{% else %}
+										<button value="{{post.id}}" name="post_id"  class="likin{{post.id}}">Unlike</button>
+									{% endif %}	
+								</div>	
+						</form>
+					<a href="{% url 'Updatepost' post.id %}" class="btn btn-warning btn-sm">Update</a>
+					<a href="{% url 'deletepost' post.id %}" class="btn btn-danger">Delete</a>
+					<!-- comments area -->
+					<a  href="{% url 'add_comment' post.id %}" class="btn btn-outline-primary" data-toggle="modal" data-target="#modalpopup">Add Comments</a><br>
+					
+					<h2>Comments...</h2>   
+					{% if not post.comments.all %}
+						No comment yet...
+					{% else %}
+						{% for comment in post.comments.all %}
+							<strong>{{ comment.user}}--{{comment.create_on}}</strong><br>
+							{{comment.content}}
+							{% if comment.user_id == user.id %}
+								
+				      			<a href="{% url 'deletecomment' comment.id %}" >Delete</a>
+				   			 {% else %}
+						    	
+						      	<a href="{% url 'notvalid' %}" >Delete</a>
+				   			 {% endif %} 
+							<br>
+						{% endfor %}
+					{% endif %}<hr>	
+				{% endfor %}
 			{% endif %}
-		</div>
+		{% endif %}
 	</div>
-	
+</div>	
+<div class="modal" tabindex="-1" role="dialog" id="modalpopup">
+  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	    	<form action="" method="POST">
+				{% csrf_token %}
+		      <div class="modal-header">
+		        <h5 class="modal-title">Comments...</h5>    
+		      </div>
+			      <div class="modal-body">
+				     
+						<textarea id="like-section"></textarea>
+						<h1>{{form.content}}</h1>
+			       </div>
+			      <div class="modal-footer">
+			        <a href="" type="submit" class="btn btn-primary">Add Comment</a>
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			      </div>
+	      	</form>
+	    </div>
+    
+  </div>
+</div>
 </body>
-<script src="{% static 'enroll/js/jquery.js'%}"></script>
-<script src="{% static 'enroll/js/popper.js'%}"></script>
-<script src="{% static 'enroll/js/bootstrap.min.js'%}"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <script>
@@ -127,6 +131,7 @@
 				}
 			})
 		});
+
 	});	
 		
 	</script>
