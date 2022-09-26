@@ -114,15 +114,20 @@ def like_PostView(request):
 		return JsonResponse(data,safe=False)
 	return redirect('/profile/')
 
-class AddCommentView(CreateView):
-	
-	model=Comment
-	form_class=CommentForm
-	template_name='registration/comment_popup.html'
-	def form_valid(self,form):
-		obj = form.save(commit=False)
-		obj.user=self.request.user
-		obj.post_id=self.kwargs['pk']
-		obj.save()
-		return super().form_valid(form)
-	success_url=reverse_lazy('profile')
+def AddCommentView(request):
+	if request.method=="POST":
+		post_id=request.POST.get('post_id')
+		post_obj=Post.objects.get(id=post_id)
+		user=request.user
+		fm=CommentForm(request.POST)
+		if fm.is_valid():
+			comment=fm.cleaned_data['content']
+			
+			regi=Comment(post=post_obj,user=user,content=comment,)
+			regi.save()
+			fm=CommentForm()
+
+	else:
+		fm=CommentForm()
+	co=Comment.objects.all()
+	return render(request,'registration/profile.html',{'form':fm,'comment':co})

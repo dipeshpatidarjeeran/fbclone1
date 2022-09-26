@@ -18,5 +18,5 @@ urlpatterns=[
 	path('updateProfile/<int:pk>',UpdateProfileView.as_view(),name='updateprofile'),
 	path('notvalid/',NotValidView.as_view(),name='notvalid'),
 	path('like/',like_PostView,name='like_post'),
-	path('artical/<int:pk>/comment/',AddCommentView.as_view(),name='add_comment'),
+	path('comment/',AddCommentView,name='add_comment'),
 ]
