@@ -115,19 +115,29 @@ def like_PostView(request):
 	return redirect('/profile/')
 
 def AddCommentView(request):
+	
 	if request.method=="POST":
 		post_id=request.POST.get('post_id')
 		post_obj=Post.objects.get(id=post_id)
 		user=request.user
+		#username=request.POST.get('user')
 		fm=CommentForm(request.POST)
 		if fm.is_valid():
-			comment=fm.cleaned_data['content']
+			comment=request.POST['content']
 			
 			regi=Comment(post=post_obj,user=user,content=comment,)
 			regi.save()
+			co=Comment.objects.values()
+			data={
+				'post_id':post_id,
+				'comment':comment,
+				#'user':username,
+			}
+			
+			return JsonResponse(data,safe=False)
+		else:
 			fm=CommentForm()
-
-	else:
-		fm=CommentForm()
-	co=Comment.objects.all()
-	return render(request,'registration/profile.html',{'form':fm,'comment':co})
+			co=Comment.objects.values()
+			data={'form':fm,'comment':'co'}
+			return JsonResponse(data,safe=False)
+	return redirect('profile/')

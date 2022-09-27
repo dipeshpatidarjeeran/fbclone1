@@ -16,7 +16,7 @@
 <body>
 
 {% if request.user.is_authenticated %}
-<h4 class="text-center alert alert-info">hello {{user.username }}</h4>
+<h4 class="text-center alert alert-info ">{{user.username }}</h4>
 <div class="text-center">
 	<a href="{% url 'mypost' user.id %}" class="btn btn-outline-secondary">My Post</a>
 	<a href="{% url 'createpost' %}" class="btn btn-info">Create Post</a>
@@ -58,7 +58,7 @@
 			      	<a href="{% url 'notvalid' %}" class="btn btn-danger">Delete</a>
 			    {% endif %} 
 			    <!-- comments area -->
-				<button value="{{ post.id }}" name="post_id" class="btn btn-primary" data-toggle="modal" data-target="#addcomment{{ post.id }}">
+				<button value="{{ post.id }}" name="post_id" class="btn btn-primary commenttext" data-toggle="modal" data-target="#addcomment{{ post.id }}">
 			    Add Comment
 			  	</button>
 		 			
@@ -68,18 +68,22 @@
 				{% if not post.comments.all %}
 					No comment yet...
 				{% else %}
-					{% for comment in post.comments.all %}
-						<strong>{{ comment.user}}-{{comment.create_on}}</strong><br>
-						{{comment.content}}
-						{% if comment.user_id == user.id %}
-							
-			      			<a href="{% url 'deletecomment' comment.id %}" >Delete</a>
-			   			 {% else %}
-					    	
-					      	<a href="{% url 'notvalid' %}" >Delete</a>
-			   			 {% endif %} 
-						<br>
-					{% endfor %}
+					<div class="comment-wrapper">
+						{% for comment in post.comments.all %}
+							<strong>{{ comment.user}}-{{comment.create_on}}</strong><br>
+							<div class="commentdiv">
+							{{comment.content}}
+							</div>
+							{% if comment.user_id == user.id %}
+								
+				      			<a href="{% url 'deletecomment' comment.id %}" >Delete</a>
+				   			 {% else %}
+						    	
+						      	<a href="{% url 'notvalid' %}" >Delete</a>
+				   			 {% endif %} 
+							<br>
+						{% endfor %}
+					</div>	
 				{% endif %}<hr>	
 			{% endfor %}
 	</div>
@@ -123,6 +127,32 @@
 				error: function (response) {
 					console.log('error',response)
 				}
+			})
+		});
+		$('.comment-form').submit(function(e){
+			
+			e.preventDefault()
+			const post_id=$(this).attr('id')
+			const url=$(this).attr('action')
+			const comment=$(`#id_content${ post_id }`).val()
+			//const user=$('.userclass').val()
+			//console.log(user)
+			$.ajax({
+				type:'POST',
+				url:url,
+				data:{
+					'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+					'post_id':post_id,	
+					'content':comment,
+									
+				},
+				success: function(data){
+					console.log(data);
+					
+				},
+				error : function(response){
+					console.log(" error",response)
+				},
 			})
 		});
 	});	
