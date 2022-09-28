@@ -64,27 +64,7 @@
 		 			
 				{% include "registration/comment_popup.html"%}
 
-				<h2>Comments...</h2>   
-				{% if not post.comments.all %}
-					No comment yet...
-				{% else %}
-					<div class="comment-wrapper">
-						{% for comment in post.comments.all %}
-							<strong>{{ comment.user}}-{{comment.create_on}}</strong><br>
-							<div class="commentdiv">
-							{{comment.content}}
-							</div>
-							{% if comment.user_id == user.id %}
-								
-				      			<a href="{% url 'deletecomment' comment.id %}" >Delete</a>
-				   			 {% else %}
-						    	
-						      	<a href="{% url 'notvalid' %}" >Delete</a>
-				   			 {% endif %} 
-							<br>
-						{% endfor %}
-					</div>	
-				{% endif %}<hr>	
+				
 			{% endfor %}
 	</div>
 </div>
@@ -130,13 +110,13 @@
 			})
 		});
 		$('.comment-form').submit(function(e){
-			
+			//debugger
 			e.preventDefault()
+			let output='';
 			const post_id=$(this).attr('id')
 			const url=$(this).attr('action')
 			const comment=$(`#id_content${ post_id }`).val()
-			//const user=$('.userclass').val()
-			//console.log(user)
+			const user_id=$('.userclass').val()
 			$.ajax({
 				type:'POST',
 				url:url,
@@ -144,16 +124,20 @@
 					'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
 					'post_id':post_id,	
 					'content':comment,
-									
+					'user_id':user_id,
+								
 				},
 				success: function(data){
-					console.log(data);
+					$(`comment-wrapper${ post_id }`).html(data.comment_data);
 					
+					$(`#addcomment${ post_id }`).hide();
+					$(".modal-backdrop").remove();
 				},
 				error : function(response){
 					console.log(" error",response)
 				},
 			})
+
 		});
 	});	
 	</script>

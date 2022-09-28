@@ -23,4 +23,24 @@
   </div>
   
 </div>
-
+<h2>Comments...</h2>   
+{% if not post.comments.all %}
+  No comment yet...
+{% else %}
+  <div class="comment-wrapper{{ post.id }}">
+    {% for comment in post.comments.all %}
+      <strong>{{ comment.user}}-{{comment.create_on}}</strong><br>
+      <div class="commentdiv">
+      {{comment.content}}
+      </div>
+      {% if comment.user_id == user.id %}
+        
+            <a href="{% url 'deletecomment' comment.id %}" >Delete</a>
+         {% else %}
+          
+            <a href="{% url 'notvalid' %}" >Delete</a>
+         {% endif %} 
+      <br>
+    {% endfor %}
+  </div>  
+{% endif %}<hr> 
