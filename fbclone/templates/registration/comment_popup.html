@@ -12,6 +12,7 @@
                     {% csrf_token %}
                     <input type="hidden" value="{{ post.id }}">
                     <input type="hidden" class="userclass" value="{{ request.user }}">
+                    <input type="hidden" value="{{post.created_on}}" class="commenttime">
                     <textarea class="form-control" id="id_content{{ post.id }}" name="content" rows="4"></textarea>
                     <button type="submit" class=" btn btn-primary ml-2"  id="submit-comment{{ post.id }}" value="{{ post.id }}" name="post_id">Comment</button>
                 </form>
@@ -23,24 +24,28 @@
   </div>
   
 </div>
-<h2>Comments...</h2>   
-{% if not post.comments.all %}
-  No comment yet...
-{% else %}
-  <div class="comment-wrapper{{ post.id }}">
+<h2>Comments...</h2>  
+<div id="comment-section"> 
+  {% if not post.comments.all %}
+    No comment yet...
+  {% else %}
+    <div class="comment-wrapper{{ post.id }}" >
     {% for comment in post.comments.all %}
-      <strong>{{ comment.user}}-{{comment.create_on}}</strong><br>
-      <div class="commentdiv">
-      {{comment.content}}
-      </div>
-      {% if comment.user_id == user.id %}
-        
+  
+        <strong>{{ comment.user}}-{{comment.create_on}}</strong><br>
+      
+        {{comment.content}}
+      
+        {% if comment.user_id == user.id %}
+
             <a href="{% url 'deletecomment' comment.id %}" >Delete</a>
          {% else %}
           
             <a href="{% url 'notvalid' %}" >Delete</a>
          {% endif %} 
-      <br>
+        <br>
+         
     {% endfor %}
-  </div>  
-{% endif %}<hr> 
+    </div>  
+  {% endif %} 
+</div><hr>

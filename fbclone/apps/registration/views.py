@@ -115,24 +115,25 @@ def like_PostView(request):
 	return redirect('/profile/')
 
 def AddCommentView(request):
+	user=request.user
 	#import pdb;pdb.set_trace()
 	if request.method=="POST":
-		user=request.user
 		post_id=request.POST.get('post_id')
 		user_id=request.POST.get('user_id')
+		create_on=request.POST.get('create_on')
 		post_obj=Post.objects.get(id=post_id)
 		fm=CommentForm(request.POST)
 		if fm.is_valid():
 			comment=request.POST['content']
 			
-			regi=Comment(post=post_obj,user=user,content=comment,)
+			regi=Comment(post=post_obj,user=user,content=comment,create_on=create_on)
 			regi.save()
 			user_com=Comment.objects.values()
-			comment_data=list(user_com)
+			comment_data=user_com[len(user_com)-1]
 			data={
-				'post_id':post_id,
+				'user':user_id,
+				'create_on':create_on,
 				'comment':comment,
-				'username':user_id,
 				'comment_data':comment_data,
 			}
 			return JsonResponse(data,safe=False)
