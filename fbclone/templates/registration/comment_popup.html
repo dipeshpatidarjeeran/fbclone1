@@ -1,35 +1,29 @@
-<div class="container">
-  <div class="modal fade" id="addcomment{{ post.id }}">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-	        <div class="modal-header">
-	          <h4 class="modal-title">Modal Heading</h4>
-	          <button type="button" class="close" data-dismiss="modal">&times;</button>
-	        </div> 
-	         <div class="modal-body">
-	         	
-                <form action="{% url 'add_comment' %}" method='POST' class="comment-form" id="{{post.id}}">
-                    {% csrf_token %}
-                    <input type="hidden" value="{{ post.id }}">
-                    <input type="hidden" class="userclass" value="{{ request.user }}">
-                    <input type="hidden" value="{{post.created_on}}" class="commenttime">
-                    <textarea class="form-control" id="id_content{{ post.id }}" name="content" rows="4"></textarea>
-                    <button type="submit" class=" btn btn-primary ml-2"  id="submit-comment{{ post.id }}" value="{{ post.id }}" name="post_id">Comment</button>
-                </form>
-                
-            </div>
-	       
+<!-- <div class="modal fade" id="addcomment{{ post.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'add_comment' %}" method='POST' class="comment-form" id="{{post.id}}">
+          {% csrf_token %}
+          <input type="hidden" value="{{ post.id }}">
+          <input type="hidden" class="userclass" value="{{ request.user }}">
+          <input type="hidden" value="{{post.created_on}}" class="commenttime">
+          <textarea class="form-control" id="id_content{{ post.id }}" name="content" rows="4"></textarea>
+          <button type="submit" class=" btn btn-primary ml-2"  id="submit-comment{{ post.id }}" value="{{ post.id }}" name="post_id">Comment</button>
+        </form>
       </div>
     </div>
   </div>
-  
 </div>
 <h2>Comments...</h2>  
-<div id="comment-section"> 
+<div id="comment-section{{ post.id }}"> 
   {% if not post.comments.all %}
-    No comment yet...
+    No comment yet...<br>
   {% else %}
-    <div class="comment-wrapper{{ post.id }}" >
+    <div class="comment-wrapper" >
     {% for comment in post.comments.all %}
   
         <strong>{{ comment.user}}-{{comment.create_on}}</strong><br>
@@ -48,4 +42,4 @@
     {% endfor %}
     </div>  
   {% endif %} 
-</div><hr>
+</div><hr> -->

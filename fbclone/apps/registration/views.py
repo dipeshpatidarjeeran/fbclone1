@@ -10,6 +10,7 @@ from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect,JsonResponse
 import json
+import datetime
 # Create your views here.
 class HomeView(TemplateView):
 	template_name='registration/home.html'
@@ -75,6 +76,7 @@ class ShowImageDetail(DetailView):
 	model=Post
 	template_name='registration/showImage.html'
 	context_object_name='showimage'
+	
 
 class UpdateProfileView(UpdateView):
 	model=User
@@ -120,22 +122,18 @@ def AddCommentView(request):
 	if request.method=="POST":
 		post_id=request.POST.get('post_id')
 		user_id=request.POST.get('user_id')
-		create_on=request.POST.get('create_on')
 		post_obj=Post.objects.get(id=post_id)
-		fm=CommentForm(request.POST)
-		if fm.is_valid():
-			comment=request.POST['content']
-			
-			regi=Comment(post=post_obj,user=user,content=comment,create_on=create_on)
-			regi.save()
-			user_com=Comment.objects.values()
-			comment_data=user_com[len(user_com)-1]
-			data={
-				'user':user_id,
-				'create_on':create_on,
-				'comment':comment,
-				'comment_data':comment_data,
-			}
-			return JsonResponse(data,safe=False)
-		
-	return redirect('/profile/')
+		timead=datetime.datetime.now()
+		timead=timead.strftime('%c')
+		comment=request.POST['content']
+		regi=Comment(post=post_obj,user=user,content=comment,created_on=timead)
+		regi.save()
+		user_com=Comment.objects.values()
+		comment_data=user_com[len(user_com)-1]
+		data={
+			'user':user_id,
+			'comment_data':comment_data,
+
+		}
+		return JsonResponse(data,safe=False)	
+	
