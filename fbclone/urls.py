@@ -18,8 +18,10 @@ from django.urls import path,include
 #from apps.registration import views 
 from django.conf import settings
 from django.conf.urls.static import static
+from api_url import api_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('createdata/', include('api_url.api_urls')),
     #path('', include('registration.urls')),
     path("login", include("django.contrib.auth.urls")), 
     path('accounts/',include('registration.urls')),
