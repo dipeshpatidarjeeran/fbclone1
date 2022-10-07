@@ -1,5 +1,5 @@
 from django.urls import path,include
-from api_view.api_views import StudentModelViewSet,PostModelViewSet,UserModelViewSet
+from api_view.api_views import StudentModelViewSet,PostModelViewSet,UserModelViewSet,UserLoginAPI
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken.views import obtain_auth_token
 
@@ -10,6 +10,7 @@ router=DefaultRouter()
 router.register('studentapi',StudentModelViewSet,basename='student')
 router.register('postapi',PostModelViewSet,basename='post')
 router.register('userapi',UserModelViewSet,basename='user')
+#router.register('login',UserLoginAPI,basename='login')
 
 urlpatterns=[
 	# path('crud/',StudentListCreate.as_view()),
