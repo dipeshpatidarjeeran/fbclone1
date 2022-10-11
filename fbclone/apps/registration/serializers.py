@@ -4,14 +4,7 @@ from django.contrib.auth.models import User
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
-# class StudentSerializer(serializers.ModelSerializer):
-# 	# def validate_roll(self,value):
-# 	# 	if value not in Student.objects.get('roll'):
-# 	# 		raise serializers.ValidationError('not valid rollno')
-# 	# 	return value
-# 	class Meta:
-# 		model=Student
-# 		fields=['id','name','roll','city']
+
 
 class PostSerializer(serializers.ModelSerializer):
 	#author=serializers.HyperlinkedRelatedField(many=True,read_only=True,view_name='authorpost')
@@ -19,6 +12,7 @@ class PostSerializer(serializers.ModelSerializer):
 	class Meta:
 		model=Post
 		fields=['id','photo','title','discription']	
+
 
 class UserSerializer(serializers.ModelSerializer):
 	# imageuser=serializers.StringRelatedField(many=True,read_only=True)
@@ -33,11 +27,11 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
 		model=Student
 		fields=['id','url','name','roll','city']
 
-class UserLoginSerializer(serializers.ModelSerializer):
-	email=serializers.EmailField(max_length=255)
-	class Meta:
-		model=User
-		fields=	['email','password']
+# class UserLoginSerializer(serializers.ModelSerializer):
+# 	username=serializers.CharField(max_length=255)
+# 	class Meta:
+# 		model=User
+# 		fields=	['username','password']
 
 
 
@@ -50,6 +44,7 @@ class LoginSerializer(serializers.ModelSerializer):
 		# if User.objects.filter(username=username,password=password).exists():
 		# 	return True
 		# return False
+
 
 class RegistrationSerializer(serializers.ModelSerializer):
 	# user=serializers.CharField(max_length=70,validators=[UniqueValidator(queryset=User.objects.all())])
