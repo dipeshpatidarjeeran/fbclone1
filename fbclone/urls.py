@@ -19,7 +19,7 @@ from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
 from api_url import api_urls
-admin.site.site_header = "DIPESH PATIDAR"
+# admin.site.site_header = "DIPESH PATIDAR"
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('createdata/', include('api_url.api_urls')),

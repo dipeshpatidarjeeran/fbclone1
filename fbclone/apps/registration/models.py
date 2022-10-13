@@ -9,7 +9,7 @@ from rest_framework.authtoken.models import Token
 
 class Post(models.Model):
 	photo=models.ImageField(null=True,blank=True,upload_to='images/')
-	author= models.ForeignKey(User,related_name='imageuser', on_delete=models.CASCADE,default='')
+	author= models.ForeignKey(User,related_name='post', on_delete=models.CASCADE,default='')
 	title=models.CharField(max_length=70)
 	discription=models.TextField(max_length=10000)
 	created_on = models.DateTimeField(auto_now_add=True,blank=True)

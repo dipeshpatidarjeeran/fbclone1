@@ -21,4 +21,9 @@ class CommentForm(forms.ModelForm):
 	class Meta:
 		model=Comment
 		fields=['id','content',]
-		
+
+
+class Subscribe(forms.Form):
+    Email = forms.EmailField()
+    def __str__(self):
+        return self.Email

@@ -11,6 +11,7 @@ router=DefaultRouter()
 router.register('studentapi',StudentModelViewSet,basename='student')
 router.register('postapi',PostModelViewSet,basename='post')
 router.register('userapi',UserModelViewSet,basename='user')
+
 # router.register('login',UserloginAPI,basename='login')
 
 urlpatterns=[

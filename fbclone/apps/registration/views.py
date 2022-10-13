@@ -9,6 +9,7 @@ from .models import Post,Like,Comment
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect,JsonResponse
+from django.contrib.auth.views import LogoutView
 import json
 import datetime
 # Create your views here.
@@ -24,7 +25,11 @@ class PostListView(ListView):
 	model=Post
 	success_url=reverse_lazy('createpost')
 	template_name='registration/profile.html'
-	
+
+
+class Userlogout(LogoutView):
+	template_name='registration/home.html'
+
 	
 class CreatePost(generic.CreateView):
 	model=User

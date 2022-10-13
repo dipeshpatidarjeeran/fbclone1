@@ -14,7 +14,7 @@
 <h2 class="text-center alert alert-info ">{{user.username }} Post</h2>
 <div class="text-center">
 	<a href="{% url 'profile' %}" class="btn btn-info">Back</a>
-	<a href="{% url 'home' %}" class="btn btn-outline-danger">Logout</a>
+	<a href="{% url 'logout' %}" class="btn btn-outline-danger">Logout</a>
 </div>
 <hr>
 <div class="row">
@@ -46,9 +46,9 @@
 					<a href="{% url 'Updatepost' post.id %}" class="btn btn-warning btn-sm">Update</a>
 					<a href="{% url 'deletepost' post.id %}" class="btn btn-danger">Delete</a>
 					<!-- comments area -->
-					<a  href="{% url 'add_comment' post.id %}" class="btn btn-outline-primary" data-toggle="modal" data-target="#modalpopup">Add Comments</a><br>
+					<!-- <a  href="" class="btn btn-outline-primary" data-toggle="modal" data-target="#modalpopup">Add Comments</a><br> -->
 					
-					<h2>Comments...</h2>   
+					<!-- <h2>Comments...</h2>   
 					{% if not post.comments.all %}
 						No comment yet...
 					{% else %}
@@ -64,7 +64,7 @@
 				   			 {% endif %} 
 							<br>
 						{% endfor %}
-					{% endif %}<hr>	
+					{% endif %}<hr> -->	
 				{% endfor %}
 			{% endif %}
 		{% endif %}
