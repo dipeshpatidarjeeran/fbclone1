@@ -11,6 +11,7 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework import generics
 from django.contrib.auth import login,logout,authenticate
 from rest_framework.authtoken.models import Token
+from registration.utils import Util
 
 class StudentModelViewSet(viewsets.ModelViewSet):
 	queryset=Student.objects.all()
@@ -25,9 +26,9 @@ class StudentModelViewSet(viewsets.ModelViewSet):
 			serializer.save()
 			return Response(serializer.data) 
 
-	def retrieve(self,request,pk=None):
-		stu=Student.objects.get(pk=pk)
-		serializer=StudentSerializer(stu)
+	def retrieve(self,request,*args,**kwargs):
+		stu=self.get_objects()
+		serializer=self.get_serializer(stu)
 		return Response(serializer.data)
 
 	def update(self, request,pk):
@@ -41,6 +42,11 @@ class StudentModelViewSet(viewsets.ModelViewSet):
 		stu=Student.objects.get(pk=pk)
 		stu.delete()
 		return Response({"msg":'data deleted '})
+
+	# def get_queryset(self):
+	# 	import pdb;pdb.set_trace()
+	# 	stu=self.request.user
+	# 	return Student.objects.filter(name=user)
 
 
 
@@ -57,16 +63,26 @@ class PostModelViewSet(viewsets.ModelViewSet):
 
 class UserloginAPI(APIView):
 	serializer_class=LoginSerializer
-
-	def post(self, request):
+	queryset=User.objects.all()
+	def post(self, request,*args,**kwargs):
+		serializer=self.serializer_class(data=request.data)
 		username=request.data['username']
+		email=request.data['email']
 		password=request.data['password']
-		user=authenticate(request,username=username,password=password)
+		user=authenticate(request,username=username,email=email,password=password)
 		if user is not None:
 			login(request,user)
 			token, created = Token.objects.get_or_create(user=user)
+			body=username+"  Your token is "+str(token)
+			#send mail
+			data={
+				"subject":"login mail",
+				"body":body,
+				"to_email":email
+				}
+			Util.send_email(data)
 			return Response({'token': token.key})
-		return Response({"error":"username and password does not match"})
+		return Response(serializer.errors)
 		
 
 class UserRegistrationAPI(generics.CreateAPIView):
@@ -77,7 +93,7 @@ class UserRegistrationAPI(generics.CreateAPIView):
 		if serializer.is_valid():
 			serializer.save()
 			return Response({"msg":"user registration successfully","data":serializer.data})
-
+		return Response(serializer.errors)
 
 class UserLogout(APIView):
 	permission_classes=[IsAuthenticated]

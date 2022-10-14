@@ -13,6 +13,10 @@ import os, sys
 from pathlib import Path
 from decouple import config
 from django.utils.timezone import make_aware
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR=os.path.join(BASE_DIR,'templates')
@@ -46,7 +50,9 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'api_url',
     'api_view',
-
+    #'django.contrib.staticfiles', 
+    'drf_yasg',
+    'drf_api_logger',
 ]
 
 MIDDLEWARE = [
@@ -57,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'drf_api_logger.middleware.api_logger_middleware.APILoggerMiddleware',
 ]
 
 ROOT_URLCONF = 'fbclone.urls'
@@ -148,6 +155,27 @@ REST_FRAMEWORK = {
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST='smtp.gmail.com'
 EMAIL_PORT=587
-EMAIL_HOST_USER='deepjeeran@gmail.com'
+EMAIL_HOST_USER='dipesh@thoughtwin.com'
 EMAIL_HOST_PASSWORD='seqxjmjmwdmgofrc'
 EMAIL_USE_TLS=True
+
+
+#sentry configure
+sentry_sdk.init(
+    dsn="https://c4f35ba835374844ad6d7dd2b161a185@o4503980653543424.ingest.sentry.io/4503980695879680",
+    integrations=[
+        DjangoIntegration(),
+    ],
+
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=1.0,
+
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True
+)
+
+#Loggers 
+DRF_API_LOGGER_DATABASE = True  

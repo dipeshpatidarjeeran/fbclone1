@@ -19,12 +19,17 @@ from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
 from api_url import api_urls
+
+def trigger_error(request):
+    division_by_zero = 1 / 0
+
 # admin.site.site_header = "DIPESH PATIDAR"
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('sentry-debug/', trigger_error),
     path('createdata/', include('api_url.api_urls')),
-    path("login", include("django.contrib.auth.urls")), 
+    path("login/", include("django.contrib.auth.urls")), 
     path('accounts/',include('registration.urls')),
     path('',include('registration.urls')),
- 
+    #path('accounts/', include('allauth.urls')),
 ]+ static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

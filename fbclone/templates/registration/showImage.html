@@ -45,7 +45,7 @@
 				          <input type="hidden" value="{{ showimage.id }}">
 				          <input type="hidden" class="userclass" value="{{ request.user }}">
 				          <input type="hidden" value="{{showimage.created_on}}" class="commenttime">
-				          <textarea class="form-control" id="id_content{{ showimage.id }}" name="content" rows="4"></textarea>
+				          <textarea class="form-control" id="id_content{{ showimage.id }}" name="content" rows="4" required ></textarea>
 				          <button type="submit" class=" btn btn-primary ml-2"  id="submit-comment{{ showimage.id }}" value="{{ showimage.id }}" name="post_id">Comment</button>
 				        </form>
 				      </div>

@@ -34,21 +34,12 @@ class StudentSerializer(serializers.ModelSerializer):
 
 class LoginSerializer(serializers.ModelSerializer):
 	username = serializers.CharField(required=True)
-	#email = serializers.EmailField(required=True)
+	email=serializers.EmailField(max_length=100)
 	password = serializers.CharField(required=True, style={"input_type": "password"})
 	class Meta:
 		model = User
-		fields = ["username","password"]
-	# def validate(self,attrs):
-	# 	email=attrs.get('email')
-	# 	data={
-	# 		"subject":"send mail",
-	# 		"body":"user Login successfully",
-	# 		"to_email":email
-	# 	}
-	# 	Util.send_email(data)
-	# 	print('send mail')
-	# 	return attrs
+		fields = ["username","email","password"]
+	
 
 class RegistrationSerializer(serializers.ModelSerializer):
 	# user=serializers.CharField(max_length=70,validators=[UniqueValidator(queryset=User.objects.all())])
@@ -62,9 +53,11 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
 	def validate(self,attrs):
 		email=attrs.get('email')
+		user=attrs.get('username')
+		body="Hello "+user+" You are registration successfully"
 		data={
 			"subject":"send mail",
-			"body":"user registration successfully",
+			"body":body,
 			"to_email":email
 		}
 		Util.send_email(data)
@@ -84,4 +77,3 @@ class RegistrationSerializer(serializers.ModelSerializer):
 		user.set_password(validated_data['password'])
 		user.save()
 		return user
-
