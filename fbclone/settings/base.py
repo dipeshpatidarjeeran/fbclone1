@@ -50,10 +50,22 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'api_url',
     'api_view',
-    #'django.contrib.staticfiles', 
     'drf_yasg',
     'drf_api_logger',
+    #social authentication,
+    'sslserver',
+    'social_django',
+    # 'django.contrib.sites',
+    # 'allauth',
+    'allauth.account',
+    # 'allauth.socialaccount',
+    # 'allauth.socialaccount.providers.google',
+    # 'allauth.socialaccount.providers.github',
+    # 'allauth.socialaccount.providers.facebook',
+
 ]
+
+SITE_ID=1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -64,7 +76,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'drf_api_logger.middleware.api_logger_middleware.APILoggerMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',   
 ]
+
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
 
 ROOT_URLCONF = 'fbclone.urls'
 
@@ -79,6 +94,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # `allauth` needs this from django
+                #'django.template.context_processors.request',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -179,3 +198,61 @@ sentry_sdk.init(
 
 #Loggers 
 DRF_API_LOGGER_DATABASE = True  
+
+#social authentication
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.github.GithubOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+    ]
+
+    
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.social_auth.associate_by_email',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
+
+# Additional configuration settings
+SOCIALACCOUNT_QUERY_EMAIL = True
+# ACCOUNT_LOGOUT_ON_GET= True
+# ACCOUNT_UNIQUE_EMAIL = True
+# ACCOUNT_EMAIL_REQUIRED = True
+
+#facebook
+SOCIAL_AUTH_FACEBOOK_KEY = "8806166412730378"
+SOCIAL_AUTH_FACEBOOK_SECRET = "f837224a6f94896917c58cd2c552092b"
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "188866156798-et48uudi9m9apo2c8n443b9pads22l6k.apps.googleusercontent.com"
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
+
+SOCIAL_AUTH_GITHUB_KEY = "e5c308ca217e84f0608e"
+SOCIAL_AUTH_GITHUB_SECRET = "95478a392b1f669488564c6646710cf7c245771e"
+
+
+SOCIAL_AUTH_FACEBOOK_SCOPE=[
+    'email',
+]
+
+
+LOGIN_REDIRECT_URL = '/accounts/profile/'
+

@@ -18,7 +18,17 @@
 			 	{{form.as_p}}
 			 	<input type="submit"  value="login" class="btn btn-outline-primary">
 			 	<a href="{% url 'signup' %}" class="btn btn-outline-secondary">signup</a>
+			 	<br><br>
+			 	
+			 	<h6 class="text-center">--login with other--</h6>
+			 	<br><br>
+			 
+		            <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-outline-primary ">Login with google</a>
+		            <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-outline-info ">Login with Facebook</a>
+		            <a href="{% url 'social:begin' 'github' %}" class="btn btn-outline-secondary ">Login with Github</a>
+		      
 			</form>
+
 		</div>
 	</div>
 </body>
