@@ -44,7 +44,7 @@ class StudentModelViewSet(viewsets.ModelViewSet):
 		return Response({"msg":'data deleted '})
 
 	# def get_queryset(self):
-	# 	import pdb;pdb.set_trace()
+	
 	# 	stu=self.request.user
 	# 	return Student.objects.filter(name=user)
 
@@ -98,7 +98,6 @@ class UserRegistrationAPI(generics.CreateAPIView):
 class UserLogout(APIView):
 	permission_classes=[IsAuthenticated]
 	def get(self,request,format=None):
-		#import pdb;pdb.set_trace()
 		request.user.auth_token.delete()
 		logout(request)
 		return Response({"msg":"logout user "})

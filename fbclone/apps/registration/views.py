@@ -123,7 +123,6 @@ def like_PostView(request):
 
 def AddCommentView(request):
 	user=request.user
-	#import pdb;pdb.set_trace()
 	if request.method=="POST":
 		post_id=request.POST.get('post_id')
 		user_id=request.POST.get('user_id')
